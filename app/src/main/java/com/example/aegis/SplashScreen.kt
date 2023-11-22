@@ -41,3 +41,9 @@ class SplashScreen : AppCompatActivity() {
         finish()
     }
 }
+
+// Create login and sign up page
+// Create a screen for profile update
+// Create a services screen for search hospital in Malaysia
+// Push notification for the app
+// Use recycler view
