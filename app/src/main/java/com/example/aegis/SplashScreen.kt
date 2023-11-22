@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.bumptech.glide.Glide
@@ -18,6 +19,7 @@ class SplashScreen : AppCompatActivity() {
     private lateinit var rightAnim : Animation
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         binding = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Glide.with(this).load(R.drawable.loading).into(binding.imageView2)
@@ -33,6 +35,7 @@ class SplashScreen : AppCompatActivity() {
         },3500)
     }
     private fun goToNext() {
+        // Check shared preferences for logged in or not logged in
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
