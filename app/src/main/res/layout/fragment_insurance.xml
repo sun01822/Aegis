@@ -5,8 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:gravity="center"
-    tools:context=".fragment.HospitalFragment">
+    tools:context=".fragment.InsuranceFragment">
 
     <!-- Navbar -->
     <LinearLayout
@@ -19,7 +18,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Medical Facilities"
+            android:text="Our Services"
             android:textColor="@color/white"
             android:gravity="center"
             android:padding="10dp"
@@ -28,29 +27,7 @@
 
     </LinearLayout>
 
-    <!-- EditText with location icon -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
-
-        <EditText
-            android:id="@+id/editTextLocation"
-            android:layout_width="386dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="6dp"
-            android:background="@drawable/edit_text_background"
-            android:drawableStart="@drawable/ic_location"
-            android:drawablePadding="8dp"
-            android:hint="Enter location"
-            android:inputType="text"
-            android:padding="12dp"
-            android:textColor="@color/black"
-            android:textStyle="bold" />
-    </RelativeLayout>
-
-    <!-- Vertical RecyclerView -->
+    <!-- Grid RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
@@ -60,6 +37,8 @@
         android:background="@android:color/white"
         android:clipToPadding="false"
         android:scrollbars="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/hospital_layout"/>
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
+        tools:listitem="@layout/insurance_layout"/>
+
 </LinearLayout>
