@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.bumptech.glide.Glide
+import com.example.aegis.activities.LogInActivity
 import com.example.aegis.databinding.ActivitySplashScreenBinding
 
 @SuppressLint("CustomSplashScreen")
@@ -36,7 +37,7 @@ class SplashScreen : AppCompatActivity() {
     }
     private fun goToNext() {
         // Check shared preferences for logged in or not logged in
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, LogInActivity::class.java)
         startActivity(intent)
         finish()
     }

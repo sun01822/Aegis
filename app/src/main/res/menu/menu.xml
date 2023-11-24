@@ -7,7 +7,7 @@
     </item>
     <item android:id="@+id/hospital"
         android:icon="@drawable/hospital"
-        android:title="Chat"
+        android:title="Hospital"
         >
     </item>
     <item android:id="@+id/profile"
