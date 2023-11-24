@@ -2,15 +2,23 @@ package com.example.aegis
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.example.aegis.databinding.ActivityMainBinding  // Update with your actual package name
 import com.example.aegis.fragment.HospitalFragment
 import com.example.aegis.fragment.HomeFragment
 import com.example.aegis.fragment.ProfileFragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
+    private lateinit var auth : FirebaseAuth
+    private lateinit var database: FirebaseDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -28,6 +36,36 @@ class MainActivity : AppCompatActivity() {
             setFragment(selectedFragment)
             true
         }
+
+        binding.editProfile.setOnClickListener {
+            setFragment(ProfileFragment())
+        }
+
+        auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance()
+        val uid = auth.currentUser?.uid
+        val userRef = database.reference.child("users").child(uid!!)
+        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val name = snapshot.child("name").value.toString()
+                val email = snapshot.child("email").value.toString()
+                val imageUrl = snapshot.child("imageUrl").value.toString()
+
+                binding.name.text = name
+                binding.email.text = email
+
+                Glide.with(this@MainActivity)
+                    .load(imageUrl)
+                    .circleCrop()
+                    .placeholder(R.drawable.logo)
+                    .into(binding.circularImageView)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle database error if needed
+                Toast.makeText(this@MainActivity, error.message, Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun setFragment(fragment: Fragment) {
