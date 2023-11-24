@@ -70,7 +70,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/profileImage">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/nameET"
+                    android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionNext"
@@ -91,7 +91,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/nameLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/passportET"
+                    android:id="@+id/passport"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionNext"
@@ -112,7 +112,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/passportLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/emailEt"
+                    android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
@@ -133,7 +133,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/emailLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/phoneEt"
+                    android:id="@+id/phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
@@ -154,7 +154,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/phoneLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/passwordEt"
+                    android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
@@ -184,12 +184,22 @@
                 app:layout_constraintTop_toBottomOf="@+id/genderSpinner">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/addressEt"
+                    android:id="@+id/address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
+                    android:minLines="4"
                     android:inputType="text"/>
             </com.google.android.material.textfield.TextInputLayout>
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:indeterminateTintMode="src_atop"
+                android:indeterminateTint="@color/appColor"
+                app:layout_constraintTop_toBottomOf="@+id/signUp" />
             <Button
                 android:id="@+id/signUp"
                 android:layout_width="wrap_content"

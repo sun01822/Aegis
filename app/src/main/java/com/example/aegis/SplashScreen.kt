@@ -37,8 +37,19 @@ class SplashScreen : AppCompatActivity() {
     }
     private fun goToNext() {
         // Check shared preferences for logged in or not logged in
-        val intent = Intent(this, LogInActivity::class.java)
-        startActivity(intent)
+        val sharedPreferences = getSharedPreferences("myPrefs", MODE_PRIVATE)
+        val loggedIn = sharedPreferences.getBoolean("loggedIn", false)
+
+        if (loggedIn) {
+            // User is logged in, go to MainActivity
+            val mainIntent = Intent(this, MainActivity::class.java)
+            startActivity(mainIntent)
+        } else {
+            // User is not logged in, go to LogInActivity
+            val loginIntent = Intent(this, LogInActivity::class.java)
+            startActivity(loginIntent)
+        }
+
         finish()
     }
 }
