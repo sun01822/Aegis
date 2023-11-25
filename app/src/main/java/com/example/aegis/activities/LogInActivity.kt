@@ -30,6 +30,13 @@ class LogInActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        binding.textViewForgotPassword.setOnClickListener {
+            val intent = Intent(this, ForgetPasswordActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         binding.buttonLogin.setOnClickListener {
             binding.progressBar.visibility = View.VISIBLE
             binding.buttonLogin.visibility = View.GONE
