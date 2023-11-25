@@ -13,7 +13,6 @@ import com.google.firebase.auth.FirebaseAuth
 class LogInActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLogInBinding
     private lateinit var auth: FirebaseAuth
-    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,8 +21,6 @@ class LogInActivity : AppCompatActivity() {
         // Initialize
         auth = FirebaseAuth.getInstance()
 
-        // Initialize SharedPreferences
-        sharedPreferences = getSharedPreferences("myPrefs", MODE_PRIVATE)
 
         binding.signupText.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
@@ -52,7 +49,6 @@ class LogInActivity : AppCompatActivity() {
                             val user = auth.currentUser
                             if (user?.isEmailVerified == true) {
                                 // Email is verified, set the "loggedIn" value to true
-                                setLoggedIn(true)
                                 // Proceed to the main activity
                                 startActivity(Intent(this, MainActivity::class.java))
                                 finish()
@@ -83,12 +79,5 @@ class LogInActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-    private fun setLoggedIn(loggedIn: Boolean) {
-        // Store the "loggedIn" value in SharedPreferences
-        val editor = sharedPreferences.edit()
-        editor.putBoolean("loggedIn", loggedIn)
-        editor.apply()
     }
 }

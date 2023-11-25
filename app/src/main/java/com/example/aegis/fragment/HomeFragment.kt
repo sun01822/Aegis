@@ -63,7 +63,3 @@ class HomeFragment : Fragment() {
     }
 }
 
-
-// Forget Password Button
-// Edit Profile
-// Profile Fragment
