@@ -1,6 +1,5 @@
 package com.example.aegis.services
 
-
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -14,14 +13,12 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.example.aegis.MainActivity
 import com.example.aegis.R
+import com.example.aegis.activities.LogInActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-
-
     private val TAG = "FireBaseMessagingService"
     private var NOTIFICATION_CHANNEL_ID = "net.larntech.notification"
     private val NOTIFICATION_ID = 100
@@ -54,7 +51,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         title: String?,
         message: String?
     ) {
-        val ii = Intent(context, MainActivity::class.java)
+        val ii = Intent(context, LogInActivity::class.java)
         ii.data = Uri.parse("custom://" + System.currentTimeMillis())
         ii.action = "action string" + System.currentTimeMillis()
         ii.flags = FLAG_ACTIVITY_SINGLE_TOP or FLAG_ACTIVITY_CLEAR_TOP

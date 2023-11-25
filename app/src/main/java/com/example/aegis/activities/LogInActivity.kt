@@ -1,5 +1,7 @@
 package com.example.aegis.activities
 
+
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -13,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 class LogInActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLogInBinding
     private lateinit var auth: FirebaseAuth
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +23,8 @@ class LogInActivity : AppCompatActivity() {
         setContentView(binding.root)
         // Initialize
         auth = FirebaseAuth.getInstance()
+        // Initialize SharedPreferences
+        sharedPreferences = this.getSharedPreferences("UserData", Context.MODE_PRIVATE)
 
 
         binding.signupText.setOnClickListener {
@@ -50,6 +55,7 @@ class LogInActivity : AppCompatActivity() {
                             if (user?.isEmailVerified == true) {
                                 // Email is verified, set the "loggedIn" value to true
                                 // Proceed to the main activity
+                                sharedPreferences.edit().putBoolean("isLoggedIn", true).apply()
                                 startActivity(Intent(this, MainActivity::class.java))
                                 finish()
                             } else {
