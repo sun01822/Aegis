@@ -15,21 +15,24 @@
 
         <TextView
             android:id="@+id/logo_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Update Info"
+            android:text="Profile"
+            android:textAlignment="center"
             android:textColor="@color/appColor"
             android:textSize="40sp"
             android:textStyle="bold"
+            android:layout_marginBottom="20dp"
             android:transitionName="logo_text" />
 
         <TextView
             android:id="@+id/slogan_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Click on image to set another profile image"
             android:textColor="#000"
             android:textStyle="bold"
+            android:padding="5dp"
             android:textSize="18sp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -147,19 +150,40 @@
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/update"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/buttonLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="5dp"
-            android:backgroundTint="#000"
-            android:padding="10dp"
-            android:layout_gravity="center"
-            android:text="Update Profile"
-            android:textColor="#fff"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginTop="10dp">
+
+            <Button
+                android:id="@+id/update"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#000"
+                android:padding="10dp"
+                android:text="Update"
+                android:textColor="#fff"
+                android:layout_weight="1"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/logout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:backgroundTint="@color/appColor"
+                android:padding="10dp"
+                android:text="Logout"
+                android:layout_weight="1"
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_toEndOf="@+id/update" />
+        </LinearLayout>
 
         <!-- Add the ProgressBar below the button -->
         <ProgressBar

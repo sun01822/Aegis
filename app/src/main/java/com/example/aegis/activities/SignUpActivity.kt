@@ -2,6 +2,7 @@ package com.example.aegis.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -12,9 +13,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.aegis.R
 import com.example.aegis.databinding.ActivitySignUpBinding
+import com.example.aegis.helper.Helper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
@@ -83,7 +86,17 @@ class SignUpActivity : AppCompatActivity() {
     ) {
         val storageRef = FirebaseStorage.getInstance().reference
         val imageRef = storageRef.child("profile_images/${System.currentTimeMillis()}.jpg")
-        val uploadTask = imageRef.putFile(selectedImageUri!!)
+
+        val originalBitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedImageUri)
+        val compressedBitmap = Helper().compressBitmap(originalBitmap)
+
+        // Create a byte array from the compressed bitmap
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        compressedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream)
+        val data = byteArrayOutputStream.toByteArray()
+
+        // Upload the compressed image data to Firebase Storage
+        val uploadTask = imageRef.putBytes(data)
 
         uploadTask.continueWithTask { task ->
             if (!task.isSuccessful) {

@@ -12,12 +12,15 @@ import android.view.animation.AnimationUtils
 import com.bumptech.glide.Glide
 import com.example.aegis.activities.LogInActivity
 import com.example.aegis.databinding.ActivitySplashScreenBinding
+import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreen : AppCompatActivity() {
-    private lateinit var binding : ActivitySplashScreenBinding
-    private lateinit var leftAnim : Animation
-    private lateinit var rightAnim : Animation
+    private lateinit var binding: ActivitySplashScreenBinding
+    private lateinit var leftAnim: Animation
+    private lateinit var rightAnim: Animation
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
@@ -30,17 +33,16 @@ class SplashScreen : AppCompatActivity() {
         binding.textView2.startAnimation(rightAnim)
         delayTimer()
     }
+
     private fun delayTimer() {
         Handler(Looper.getMainLooper()).postDelayed({
             goToNext()
-        },3500)
+        }, 3500)
     }
-    private fun goToNext() {
-        // Check shared preferences for logged in or not logged in
-        val sharedPreferences = getSharedPreferences("myPrefs", MODE_PRIVATE)
-        val loggedIn = sharedPreferences.getBoolean("loggedIn", false)
 
-        if (loggedIn) {
+    private fun goToNext() {
+        val user = auth.currentUser
+        if (user != null) {
             // User is logged in, go to MainActivity
             val mainIntent = Intent(this, MainActivity::class.java)
             startActivity(mainIntent)
@@ -49,13 +51,6 @@ class SplashScreen : AppCompatActivity() {
             val loginIntent = Intent(this, LogInActivity::class.java)
             startActivity(loginIntent)
         }
-
         finish()
     }
 }
-
-// Create login and sign up page
-// Create a screen for profile update
-// Create a services screen for search hospital in Malaysia
-// Push notification for the app
-// Use recycler view
