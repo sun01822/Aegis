@@ -60,13 +60,19 @@ class SignUpActivity : AppCompatActivity() {
             val password = binding.password.text.toString()
             val selectedGender = binding.genderSpinner.selectedItem.toString()
             val address = binding.address.text.toString()
-
-            if (selectedImageUri != null) {
-                uploadImageAndCreateAccount(name, passport, email, phone, password, selectedGender, address)
-            } else {
-                // If no image is selected, create an account without uploading an image
-                image = "https://firebasestorage.googleapis.com/v0/b/aegis-17642.appspot.com/o/default.jpg?alt=media&token=60e1c165-8227-4c62-bb09-b7cace0e1510"
-                createAccount(name, passport, email, phone, password, selectedGender, address)
+            if(password.isEmpty()||email.isEmpty()){
+                Toast.makeText(this, "Fill Up email and password", Toast.LENGTH_SHORT).show()
+                binding.progressBar.visibility = View.GONE
+                binding.signUp.visibility = View.VISIBLE
+            }
+            else{
+                if (selectedImageUri != null) {
+                    uploadImageAndCreateAccount(name, passport, email, phone, password, selectedGender, address)
+                } else {
+                    // If no image is selected, create an account without uploading an image
+                    image = "https://firebasestorage.googleapis.com/v0/b/aegis-17642.appspot.com/o/default.jpg?alt=media&token=60e1c165-8227-4c62-bb09-b7cace0e1510"
+                    createAccount(name, passport, email, phone, password, selectedGender, address)
+                }
             }
         }
     }
@@ -112,7 +118,6 @@ class SignUpActivity : AppCompatActivity() {
                             "name" to name,
                             "passport" to passport,
                             "email" to email,
-                            "password" to password,
                             "imageUrl" to image,
                             "address" to address,
                             "gender" to selectedGender,
