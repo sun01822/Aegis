@@ -2,5 +2,5 @@
 Aegis - Health Insurance plan mobile app
 
 
-## Notification
+### Notification
 Allow notification to get the Firebase Cloud Messages
