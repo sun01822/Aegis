@@ -1,7 +1,9 @@
 package com.example.aegis.fragment
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -30,12 +32,15 @@ class ProfileFragment : Fragment() {
     private lateinit var storage: FirebaseStorage
     private lateinit var storageReference: StorageReference
     private var selectedImageUri: Uri? = null
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentProfileBinding.inflate(layoutInflater)
+        // Initialize SharedPreferences
+        sharedPreferences = requireContext().getSharedPreferences("UserData", Context.MODE_PRIVATE)
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
         userReference = database.reference.child("users").child(auth.currentUser!!.uid)
@@ -62,6 +67,7 @@ class ProfileFragment : Fragment() {
 
         binding.logout.setOnClickListener {
             // Set loggedIn preference to false
+            sharedPreferences.edit().putBoolean("isLoggedIn", false).apply()
             auth.signOut()
             Toast.makeText(requireContext(), "Logout successfully!!!", Toast.LENGTH_LONG).show()
             // Redirect to the login screen after logout
