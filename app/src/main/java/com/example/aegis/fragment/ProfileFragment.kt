@@ -1,8 +1,7 @@
 package com.example.aegis.fragment
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -31,15 +30,12 @@ class ProfileFragment : Fragment() {
     private lateinit var storage: FirebaseStorage
     private lateinit var storageReference: StorageReference
     private var selectedImageUri: Uri? = null
-    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentProfileBinding.inflate(layoutInflater)
-        // Initialize SharedPreferences
-        sharedPreferences = requireContext().getSharedPreferences("UserData", Context.MODE_PRIVATE)
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
         userReference = database.reference.child("users").child(auth.currentUser!!.uid)
@@ -67,8 +63,6 @@ class ProfileFragment : Fragment() {
 
         binding.logout.setOnClickListener {
             // Set loggedIn preference to false
-            // Clear the logged-in state using SharedPreferences
-            sharedPreferences.edit().putBoolean("isLoggedIn", false).apply()
             auth.signOut()
             Toast.makeText(requireContext(), "Logout successfully!!!", Toast.LENGTH_LONG).show()
             // Redirect to the login screen after logout
@@ -166,4 +160,14 @@ class ProfileFragment : Fragment() {
         private const val REQUEST_IMAGE_PICKER = 1
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_IMAGE_PICKER && resultCode == Activity.RESULT_OK) {
+            selectedImageUri = data?.data
+            if (selectedImageUri != null) {
+                Glide.with(this@ProfileFragment).load(selectedImageUri).into(binding.profileImage)
+            }
+        }
+    }
 }

@@ -14,14 +14,13 @@ import android.view.animation.AnimationUtils
 import com.bumptech.glide.Glide
 import com.example.aegis.activities.LogInActivity
 import com.example.aegis.databinding.ActivitySplashScreenBinding
-import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreen : AppCompatActivity() {
     private lateinit var binding: ActivitySplashScreenBinding
     private lateinit var leftAnim: Animation
     private lateinit var rightAnim: Animation
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    //private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var sharedPreferences: SharedPreferences
     private var isLoggedIn: Boolean = false
 
