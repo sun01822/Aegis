@@ -1,5 +1,6 @@
 package com.example.aegis.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -159,4 +160,14 @@ class ProfileFragment : Fragment() {
         private const val REQUEST_IMAGE_PICKER = 1
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_IMAGE_PICKER && resultCode == Activity.RESULT_OK) {
+            selectedImageUri = data?.data
+            if (selectedImageUri != null) {
+                Glide.with(this@ProfileFragment).load(selectedImageUri).into(binding.profileImage)
+            }
+        }
+    }
 }
