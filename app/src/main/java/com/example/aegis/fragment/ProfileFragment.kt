@@ -45,14 +45,13 @@ class ProfileFragment : Fragment() {
 
         binding.update.setOnClickListener {
             val updatedName = binding.name.text.toString()
-            val updatedEmail = binding.email.text.toString()
             val updatedPassport = binding.passport.text.toString()
             val updatedPhone = binding.phone.text.toString()
             val updatedGender = binding.gender.text.toString()
             val updatedAddress = binding.address.text.toString()
 
             // Update user data in the database
-            updateUserData(updatedName, updatedEmail, updatedPassport, updatedPhone, updatedGender, updatedAddress)
+            updateUserData(updatedName, updatedPassport, updatedPhone, updatedGender, updatedAddress)
 
             // Check if a new image is selected
             selectedImageUri?.let { uri ->
@@ -97,7 +96,6 @@ class ProfileFragment : Fragment() {
                     userData?.let {
                         with(binding) {
                             name.setText(it.name)
-                            email.setText(it.email)
                             passport.setText(it.passport)
                             phone.setText(it.phone)
                             gender.setText(it.gender)
@@ -115,10 +113,9 @@ class ProfileFragment : Fragment() {
     }
 
 
-    private fun updateUserData(name: String, email: String, passport: String, phone: String, gender: String, address: String) {
+    private fun updateUserData(name: String, passport: String, phone: String, gender: String, address: String) {
         with(userReference) {
             child("name").setValue(name)
-            child("email").setValue(email)
             child("passport").setValue(passport)
             child("phone").setValue(phone)
             child("gender").setValue(gender)
@@ -170,4 +167,5 @@ class ProfileFragment : Fragment() {
             }
         }
     }
+
 }

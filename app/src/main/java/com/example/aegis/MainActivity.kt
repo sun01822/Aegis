@@ -43,8 +43,17 @@ class MainActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
+        loadUserData()
+    }
+
+    private fun setFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+    }
+
+    private fun loadUserData() {
         val uid = auth.currentUser?.uid
         val userRef = database.reference.child("users").child(uid!!)
+
         userRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val name = snapshot.child("name").value.toString()
@@ -66,9 +75,5 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this@MainActivity, error.message, Toast.LENGTH_SHORT).show()
             }
         })
-    }
-
-    private fun setFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
     }
 }
