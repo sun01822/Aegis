@@ -1,6 +1,7 @@
 package com.example.aegis.fragment
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -83,8 +84,29 @@ class ProfileFragment : Fragment() {
     }
 
     private fun openImagePicker() {
-        startActivityForResult(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), REQUEST_IMAGE_PICKER)
+        val options = arrayOf("Camera", "Gallery")
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Choose an option")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> openCamera()
+                    1 -> openGallery()
+                }
+            }
+        builder.show()
     }
+
+    private fun openCamera() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(cameraIntent, REQUEST_CAMERA)
+    }
+
+    private fun openGallery() {
+        val galleryIntent =
+            Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(galleryIntent, REQUEST_GALLERY)
+    }
+
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -160,18 +182,44 @@ class ProfileFragment : Fragment() {
     data class UserData(val name: String = "", val email: String = "", val passport: String = "", val phone: String = "", val gender: String = "", val address: String = "", val imageUrl: String = "")
 
     companion object {
-        private const val REQUEST_IMAGE_PICKER = 1
+        private const val REQUEST_CAMERA = 101
+        private const val REQUEST_GALLERY = 102
     }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_PICKER && resultCode == Activity.RESULT_OK) {
-            selectedImageUri = data?.data
-            if (selectedImageUri != null) {
-                Glide.with(this@ProfileFragment).load(selectedImageUri).into(binding.profileImage)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CAMERA -> {
+                    val photo = data?.extras?.get("data") as? Bitmap
+                    if (photo != null) {
+                        selectedImageUri = getImageUri(photo)
+                        loadProfileImage(selectedImageUri)
+                    } else {
+                        showToast("Error capturing image from camera")
+                    }
+                }
+                REQUEST_GALLERY -> {
+                    selectedImageUri = data?.data
+                    if (selectedImageUri != null) {
+                        Glide.with(this@ProfileFragment).load(selectedImageUri).into(binding.profileImage)
+                    } else {
+                        showToast("Error selecting image from gallery")
+                    }
+                }
             }
         }
     }
-
+    private fun getImageUri(inImage: Bitmap): Uri {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(
+            requireContext().contentResolver,
+            inImage,
+            "Title",
+            null
+        )
+        return Uri.parse(path)
+    }
 }
