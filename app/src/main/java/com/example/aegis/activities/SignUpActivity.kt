@@ -1,6 +1,7 @@
 package com.example.aegis.activities
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -9,6 +10,7 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.aegis.R
@@ -49,7 +51,7 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         binding.profileImage.setOnClickListener {
-            openImagePicker()
+            showImagePickerDialog()
         }
 
         binding.signUp.setOnClickListener {
@@ -165,11 +167,6 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun openImagePicker() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, REQUEST_IMAGE_PICKER)
-    }
-
     private fun handleUploadImageError() {
         binding.progressBar.visibility = View.GONE
         binding.signUp.visibility = View.VISIBLE
@@ -192,18 +189,66 @@ class SignUpActivity : AppCompatActivity() {
         Toast.makeText(this, "Error: $errorMessage", Toast.LENGTH_SHORT).show()
     }
 
+    private fun showImagePickerDialog() {
+        val options = arrayOf("Camera", "Gallery")
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Choose an option")
+            .setItems(options) { _: DialogInterface?, which: Int ->
+                when (which) {
+                    0 -> openCamera()
+                    1 -> openGallery()
+                }
+            }
+        builder.show()
+    }
+
+    private fun openCamera() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(cameraIntent, REQUEST_CAMERA)
+    }
+
+    private fun openGallery() {
+        val galleryIntent =
+            Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(galleryIntent, REQUEST_GALLERY)
+    }
+
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_PICKER && resultCode == Activity.RESULT_OK) {
-            selectedImageUri = data?.data
-            if (selectedImageUri != null) {
-                Glide.with(this@SignUpActivity).load(selectedImageUri).into(binding.profileImage)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CAMERA -> {
+                    val photo = data?.extras?.get("data") as Bitmap
+                    selectedImageUri = getImageUri(photo)
+                    loadProfileImage()
+                }
+                REQUEST_GALLERY -> {
+                    selectedImageUri = data?.data
+                    loadProfileImage()
+                }
             }
         }
     }
 
+    private fun getImageUri(inImage: Bitmap): Uri {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(
+            contentResolver,
+            inImage,
+            "Title",
+            null
+        )
+        return Uri.parse(path)
+    }
+
+    private fun loadProfileImage() {
+        Glide.with(this@SignUpActivity).load(selectedImageUri).into(binding.profileImage)
+    }
+
     companion object {
-        private const val REQUEST_IMAGE_PICKER = 1
+        private const val REQUEST_CAMERA = 101
+        private const val REQUEST_GALLERY = 102
     }
 }
